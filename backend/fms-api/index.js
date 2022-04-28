@@ -2,157 +2,124 @@ const express = require('express')
 const path = require('path')
 const cors = require('cors')
 const app = express()
-require('dotenv').config()
-app.use(cors())
 const bp = require('body-parser')
+
+require('dotenv').config()
+
+app.use(cors())
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
-// var host = process.env.DB_HOST || 'localhost'
-// var user = process.env.DB_USER || 'root'
-// var password = process.env.DB_PASS || '1234'
-// var database = process.env.DB_NAME || 'jet'
+// ========== Production ==========
+const dbHost = process.env.DB_HOST
+const dbUser = process.env.DB_USER
+const dbPassword = process.env.DB_PASS
+const dbDatabase = process.env.DB_NAME
 
-const host = 'localhost'
-var user = process.env.DB_USER || 'root'
-var password = process.env.DB_PASS || '1234'
-var database = process.env.DB_NAME || 'jet'
+// ========== Local ==========
+// const dbHost = 'localhost'
+// const dbUser = 'root'
+// const dbPassword = 'root'
+// const dbDatabase = 'fms'
 
-app.get('/sleep', (req, res) => {
+// ========== /connectAPI ==========
+app.get('/connectAPI', (req, res) => {
   res.status(200).json({
-    message: 'Sleep',
+    message: 'Success',
   })
 })
 
+// ========== /userList ==========
 app.get('/userList', (req, res) => {
   var userList = []
   var mysql = require('mysql')
   var con = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '1234',
-    database: process.env.DB_NAME || 'fms',
-    // host: 'localhost',
-    // user: 'root',
-    // password: '1234',
-    // database: 'fms',
+    host: dbHost,
+    user: dbUser,
+    password: dbPassword,
+    database: dbDatabase,
   })
 
   con.connect(function (err) {
     if (err) throw err
-    console.log('You are connected =================================!')
-    var sql = 'select * from users'
-    con.query(sql, function (err, result) {
-      /* if (err) console.log(err)
-      console.log(result)
-      userList = result*/
-      if (err) {
-        console.log(err)
-      } else {
-        console.log(result)
-        console.log(result[0])
-        userList = result
-        console.log(userList)
-        res.status(200).json({
-          message: 'เรียกข้อมูลสำเร็จ',
-          data: userList,
-        })
-      }
-    })
-    con.end()
-  })
+    console.log('You are connected!')
+  });
+
+  var sql = 'SELECT * FROM users'
+  con.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      userList = result
+      res.status(200).json({
+        message: 'เรียกข้อมูลสำเร็จ',
+        data: userList,
+      })
+    }
+  });
+
+  con.end();
 })
 
+// ========== /login/:username/:password ==========
 app.get('/login/:username/:password', (req, res) => {
-  var un = req.params.username
-  var pw = req.params.password
-  console.log(un, pw)
+  var username = req.params.username
+  var password = req.params.password
   var user = {}
   var mysql = require('mysql')
   var con = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '1234',
-    database: process.env.DB_NAME || 'fms',
-    // host: 'localhost',
-    // user: 'root',
-    // password: '1234',
-    // database: 'fms',
+    host: dbHost,
+    user: dbUser,
+    password: dbPassword,
+    database: dbDatabase,
   })
 
   con.connect(function (err) {
     if (err) throw err
-    console.log('You are connected =================================!')
-    var sql =
-      "select * from users where username = '" +
-      un +
-      "' and password = '" +
-      pw +
-      "'"
+    console.log('You are connected!')
+  });
 
-    con.query(sql, function (err, result) {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log(result)
-        console.log(result[0])
-        user = result[0]
-        console.log(user)
-        res.status(200).json({
-          message: 'เรียกข้อมูลสำเร็จ',
-          data: user,
-        })
-      }
-    })
-    con.end()
-  })
+  var sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
+  con.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      user = result[0]
+      res.status(200).json({
+        message: 'เรียกข้อมูลสำเร็จ',
+        data: user,
+      })
+    }
+  });
+
+  con.end();
 })
 
+// ========== /createUser ==========
 app.post('/createUser', (req, res) => {
-  console.log('-----------------------------------------')
-  console.log(req.body)
   var reqObj = req.body
   var mysql = require('mysql')
   var con = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '1234',
-    database: process.env.DB_NAME || 'fms',
-    // host: 'localhost',
-    // user: 'root',
-    // password: '1234',
-    // database: 'fms',
+    host: dbHost,
+    user: dbUser,
+    password: dbPassword,
+    database: dbDatabase,
   })
 
   con.connect(function (err) {
     if (err) throw err
-    console.log('You are connected =================================!')
+    console.log('You are connected!')
 
-    var sql =
-      'insert into users values(' +
-      "'" +
-      reqObj.id +
-      "', " +
-      "'" +
-      reqObj.firstName +
-      "', " +
-      "'" +
-      reqObj.lastName +
-      "', " +
-      "'" +
-      reqObj.email +
-      "', " +
-      "'" +
-      reqObj.phoneName +
-      "', " +
-      "'" +
-      reqObj.userName +
-      "', " +
-      "'" +
-      reqObj.password +
-      "', 1,0" +
+    var sql = 'INSERT INTO users VALUES(' +
+      "'" + reqObj.id + "', " +
+      "'" + reqObj.firstName + "', " +
+      "'" + reqObj.lastName + "', " +
+      "'" + reqObj.email + "', " +
+      "'" + reqObj.phoneName + "', " +
+      "'" + reqObj.userName + "', " +
+      "'" + reqObj.password + "', 1,0" +
       ')'
-    console.log(sql)
+
     con.query(sql, function (err, result) {
       if (err) {
         console.log(err)
@@ -167,6 +134,7 @@ app.post('/createUser', (req, res) => {
         })
       }
     })
+
     con.end()
   })
 })
@@ -174,6 +142,7 @@ app.post('/createUser', (req, res) => {
 app.use(
   express.static(path.join(__dirname, '../../fms-web-main/projectjs/dist')),
 )
+
 app.listen(3000, (err) => {
   err
     ? console.log('Fail to Start Server')
