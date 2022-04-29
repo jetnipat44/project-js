@@ -22,7 +22,7 @@
           <div class="row">
             <div class="flex md1"></div>
             <div class="flex md10">
-              <va-input class="mb-4" v-model="userName" label="UserName" />
+              <va-input class="mb-4" v-model="userName" label="ชื่อผู้ใช้งาน" />
             </div>
             <div class="flex md1"></div>
           </div>
@@ -33,7 +33,7 @@
                 type="password"
                 class="mb-4"
                 v-model="password"
-                label="Password"
+                label="รหัสผ่าน"
               />
             </div>
             <div class="flex md1"></div>
@@ -73,14 +73,14 @@ export default {
       if (this.userName == "") {
         Swal.fire({
           title: "พบข้อผิดพลาด",
-          text: "กรุณากรอก Username",
+          text: "กรุณากรอกชื่อผู้ใช้งาน",
           icon: "error",
           confirmButtonText: "ตกลง",
         });
       } else if (this.password == "") {
         Swal.fire({
           title: "พบข้อผิดพลาด",
-          text: "กรุณากรอก Password",
+          text: "กรุณากรอกรหัสผ่าน",
           icon: "error",
           confirmButtonText: "ตกลง",
         });

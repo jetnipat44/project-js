@@ -31,6 +31,7 @@ app.get('/connectAPI', (req, res) => {
 
 // ========== /userList ==========
 app.get('/userList', (req, res) => {
+  console.log('/userList');
   // var userList = []
   // var mysql = require('mysql')
   // var con = mysql.createConnection({
@@ -73,8 +74,8 @@ app.get('/userList', (req, res) => {
         "phone": "0812345678",
         "username": "jet",
         "password": "1234",
-        "is_active": "1",
-        "is_admin": "1",
+        "is_active": true,
+        "is_admin": true,
       },
       {
         "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
@@ -84,8 +85,8 @@ app.get('/userList', (req, res) => {
         "phone": "0812345678",
         "username": "coke",
         "password": "1234",
-        "is_active": "1",
-        "is_admin": "1",
+        "is_active": true,
+        "is_admin": true,
       },
       {
         "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
@@ -95,8 +96,8 @@ app.get('/userList', (req, res) => {
         "phone": "0812345678",
         "username": "panza",
         "password": "1234",
-        "is_active": "1",
-        "is_admin": "1",
+        "is_active": true,
+        "is_admin": false,
       },
       {
         "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
@@ -106,8 +107,122 @@ app.get('/userList', (req, res) => {
         "phone": "0812345678",
         "username": "khaopoon",
         "password": "1234",
-        "is_active": "1",
-        "is_admin": "1",
+        "is_active": true,
+        "is_admin": false,
+      }
+    ],
+  })
+  // =============================
+})
+
+// ========== /fileList ==========
+app.get('/fileList', (req, res) => {
+  console.log('/fileList');
+  // var fileList = []
+  // var mysql = require('mysql')
+  // var con = mysql.createConnection({
+  //   host: dbHost,
+  //   user: dbUser,
+  //   password: dbPassword,
+  //   database: dbDatabase,
+  // })
+
+  // con.connect(function (err) {
+  //   if (err) throw err
+  //   console.log('You are connected!')
+  // });
+
+  // var sql = 'SELECT * FROM files'
+  // con.query(sql, function (err, result) {
+  //   if (err) {
+  //     console.log(err)
+  //   } else {
+  //     fileList = result
+  //     res.status(200).json({
+  //       message: 'เรียกข้อมูลสำเร็จ',
+  //       data: fileList,
+  //     })
+  //   }
+  // });
+
+  // con.end();
+
+
+  // ========= Mock ==========
+  res.status(200).json({
+    message: 'เรียกข้อมูลสำเร็จ',
+    data: [
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test01.pdf",
+        "file_type": "pdf",
+        "file_size": "12 MB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
+      },
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test02.pdf",
+        "file_type": "pdf",
+        "file_size": "1 MB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
+      },
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test03.pdf",
+        "file_type": "pdf",
+        "file_size": "120 KB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
+      },
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test04.json",
+        "file_type": "json",
+        "file_size": "10 KB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
+      },
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test05.jpg",
+        "file_type": "jpg",
+        "file_size": "12 MB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
+      },
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test06.pdf",
+        "file_type": "pdf",
+        "file_size": "1 MB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
+      },
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test07.png",
+        "file_type": "png",
+        "file_size": "120 KB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
+      },
+      {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "file_name": "test08.json",
+        "file_type": "json",
+        "file_size": "10 KB.",
+        "ref": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_by": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "create_date": "2022-04-30"
       }
     ],
   })
@@ -132,7 +247,58 @@ app.get('/login/:username/:password', (req, res) => {
   //   console.log('You are connected!')
   // });
 
-  // var sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
+  // var sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "' AND is_active = 1";
+  // con.query(sql, function (err, result) {
+  //   if (err) {
+  //     console.log(err)
+  //   } else {
+  //     user = result[0]
+  //     res.status(200).json({
+  //       message: 'เรียกข้อมูลสำเร็จ',
+  //       data: user,
+  //     })
+  //   }
+  // });
+
+  // con.end();
+
+  // ========= Mock ==========
+  res.status(200).json({
+    message: 'เรียกข้อมูลสำเร็จ',
+    data: {
+        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+        "first_name": "Supattalak",
+        "last_name": "Phoha",
+        "email": "supattalak@gmail.com",
+        "phone": "0812345678",
+        "username": "coke",
+        "password": "1234",
+        "is_active": "1",
+        "is_admin": "1",
+      }
+  })
+  // =============================
+})
+
+// ========== /userById/:id ==========
+app.get('/userById/:id', (req, res) => {
+  console.log("/userById/:id");
+  // var id = req.params.id
+  // var user = {}
+  // var mysql = require('mysql')
+  // var con = mysql.createConnection({
+  //   host: dbHost,
+  //   user: dbUser,
+  //   password: dbPassword,
+  //   database: dbDatabase,
+  // })
+
+  // con.connect(function (err) {
+  //   if (err) throw err
+  //   console.log('You are connected!')
+  // });
+
+  // var sql = "SELECT * FROM users WHERE id = '" + id + "'";
   // con.query(sql, function (err, result) {
   //   if (err) {
   //     console.log(err)
@@ -167,46 +333,181 @@ app.get('/login/:username/:password', (req, res) => {
 
 // ========== /createUser ==========
 app.post('/createUser', (req, res) => {
-  var reqObj = req.body
-  var mysql = require('mysql')
-  var con = mysql.createConnection({
-    host: dbHost,
-    user: dbUser,
-    password: dbPassword,
-    database: dbDatabase,
+  console.log('/createUser');
+  // var reqObj = req.body
+  // var mysql = require('mysql')
+  // var con = mysql.createConnection({
+  //   host: dbHost,
+  //   user: dbUser,
+  //   password: dbPassword,
+  //   database: dbDatabase,
+  // })
+
+  // con.connect(function (err) {
+  //   if (err) throw err
+  //   console.log('You are connected!')
+
+  //   var sql = 'INSERT INTO users VALUES(' +
+  //     "'" + reqObj.id + "', " +
+  //     "'" + reqObj.firstName + "', " +
+  //     "'" + reqObj.lastName + "', " +
+  //     "'" + reqObj.email + "', " +
+  //     "'" + reqObj.phone + "', " +
+  //     "'" + reqObj.userName + "', " +
+  //     "'" + reqObj.password + "', 1,0" +
+  //     ')'
+
+  //   con.query(sql, function (err, result) {
+  //     if (err) {
+  //       console.log(err)
+  //     } else {
+  //       console.log(result)
+  //       console.log(result[0])
+  //       user = result[0]
+  //       console.log(user)
+  //       res.status(200).json({
+  //         message: 'เรียกข้อมูลสำเร็จ',
+  //         data: user,
+  //       })
+  //     }
+  //   })
+
+  //   con.end()
+  // })
+
+  // ========= Mock ==========
+  res.status(200).json({
+    message: 'เรียกข้อมูลสำเร็จ',
+    data: true
   })
+  // =============================
+})
 
-  con.connect(function (err) {
-    if (err) throw err
-    console.log('You are connected!')
+// ========== /updateUser ==========
+app.put('/updateUser', (req, res) => {
+  console.log('/updateUser');
+  // var reqObj = req.body
+  // var mysql = require('mysql')
+  // var con = mysql.createConnection({
+  //   host: dbHost,
+  //   user: dbUser,
+  //   password: dbPassword,
+  //   database: dbDatabase,
+  // })
 
-    var sql = 'INSERT INTO users VALUES(' +
-      "'" + reqObj.id + "', " +
-      "'" + reqObj.firstName + "', " +
-      "'" + reqObj.lastName + "', " +
-      "'" + reqObj.email + "', " +
-      "'" + reqObj.phone + "', " +
-      "'" + reqObj.userName + "', " +
-      "'" + reqObj.password + "', 1,0" +
-      ')'
+  // con.connect(function (err) {
+  //   if (err) throw err
+  //   console.log('You are connected!')
 
-    con.query(sql, function (err, result) {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log(result)
-        console.log(result[0])
-        user = result[0]
-        console.log(user)
-        res.status(200).json({
-          message: 'เรียกข้อมูลสำเร็จ',
-          data: user,
-        })
-      }
-    })
+  //   var sql = 'UPDATE users SET' +
+  //     "first_name = '" + reqObj.firstName + "', " +
+  //     "lase_name = '" + reqObj.lastName + "', " +
+  //     "email = '" + reqObj.email + "', " +
+  //     "phone = '" + reqObj.phone + "', " +
+  //     "username = '" + reqObj.userName + "', " +
+  //     "password = '" + reqObj.password + "', " +
+  //     "is_active = " + reqObj.isActive + ", " +
+  //     "ia_admin = " + reqObj.isAdmin + " " +
+  //     "WHERE id = " + reqObj.id
 
-    con.end()
+  //   con.query(sql, function (err, result) {
+  //     if (err) {
+  //       console.log(err)
+  //     } else {
+  //       res.status(200).json({
+  //         message: 'เรียกข้อมูลสำเร็จ',
+  //         data: true,
+  //       })
+  //     }
+  //   })
+
+  //   con.end()
+  // })
+
+  // ========= Mock ==========
+  res.status(200).json({
+    message: 'เรียกข้อมูลสำเร็จ',
+    data: true
   })
+  // =============================
+})
+
+// ========== /deleteUser/:id ==========
+app.delete('/deleteUser/:id', (req, res) => {
+  console.log('/deleteUser/:id');
+  // var id = req.params.id
+  // var mysql = require('mysql')
+  // var con = mysql.createConnection({
+  //   host: dbHost,
+  //   user: dbUser,
+  //   password: dbPassword,
+  //   database: dbDatabase,
+  // })
+
+  // con.connect(function (err) {
+  //   if (err) throw err
+  //   console.log('You are connected!')
+  // });
+
+  // var sql = "DELETE FROM users WHERE id = '" + id + "'";
+  // con.query(sql, function (err, result) {
+  //   if (err) {
+  //     console.log(err)
+  //   } else {
+  //     res.status(200).json({
+  //       message: 'เรียกข้อมูลสำเร็จ',
+  //       data: true,
+  //     })
+  //   }
+  // });
+
+  // con.end();
+
+  // ========= Mock ==========
+  res.status(200).json({
+    message: 'เรียกข้อมูลสำเร็จ',
+    data: true
+  })
+  // =============================
+})
+
+// ========== /deleteFile/:id ==========
+app.delete('/deleteFile/:id', (req, res) => {
+  console.log('/deleteFile/:id');
+  // var id = req.params.id
+  // var mysql = require('mysql')
+  // var con = mysql.createConnection({
+  //   host: dbHost,
+  //   user: dbUser,
+  //   password: dbPassword,
+  //   database: dbDatabase,
+  // })
+
+  // con.connect(function (err) {
+  //   if (err) throw err
+  //   console.log('You are connected!')
+  // });
+
+  // var sql = "DELETE FROM files WHERE id = '" + id + "'";
+  // con.query(sql, function (err, result) {
+  //   if (err) {
+  //     console.log(err)
+  //   } else {
+  //     res.status(200).json({
+  //       message: 'เรียกข้อมูลสำเร็จ',
+  //       data: true,
+  //     })
+  //   }
+  // });
+
+  // con.end();
+
+  // ========= Mock ==========
+  res.status(200).json({
+    message: 'เรียกข้อมูลสำเร็จ',
+    data: true
+  })
+  // =============================
 })
 
 app.use(

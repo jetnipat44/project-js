@@ -1,6 +1,6 @@
 <template>
   <body style="background-color: #fff">
-    <va-navbar color="primary" shape class="mb-2" @click="toggleMunu">
+    <va-navbar color="#7e5338" shape class="mb-2" @click="toggleMunu">
       <template #left>
         <va-navbar-item style="width: 10%">
           <img
@@ -14,7 +14,7 @@
       </template>
       <template #right>
         <va-navbar-item
-          >คุณเจตนิพัทธ์ ประกอบนา
+          >{{ fname }} {{ lname }}
           <va-avatar
             size="small"
             src="https://www.bsglobaltrade.com/wp-content/uploads/2016/09/person-icon.png"
@@ -30,7 +30,10 @@
           style="height: auto"
         >
           <va-sidebar-item :active="true">
-            <va-sidebar-item-content @click="goToFileManagement">
+            <va-sidebar-item-content
+              @click="goToFileManagement"
+              style="background-color:#a37b64; !important"
+            >
               <span class="material-symbols-outlined"> dashboard </span>
               <va-sidebar-item-title v-if="!minimized" style="height: 24px">
                 การจัดการไฟล์
@@ -53,181 +56,134 @@
               </va-sidebar-item-title>
             </va-sidebar-item-content>
           </va-sidebar-item>
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </va-sidebar>
 
         <div class="flex md1"></div>
         <div class="flex md8">
           <br />
           <div class="row">
-            <va-input class="flex mb-2 md12" v-model="filter" label="ค้นหา" />
+            <div class="flex md9">
+              <va-input class="flex mb-2 md12" v-model="filter" label="ค้นหา" />
+            </div>
+            <div class="flex md1"></div>
+            <div class="flex md2">
+              <va-button class="customButton01" @click="openModelAdd">
+                <span class="material-symbols-outlined"> add </span>เพิ่มไฟล์
+              </va-button>
+            </div>
           </div>
 
           <va-data-table
-            :items="items"
+            :key="key"
+            :items="fileList"
             :columns="columns"
             :filter="filter"
             :filter-method="customFilteringFn"
             @filtered="filteredCount = $event.items.length"
-          />
+          >
+            <template #cell(delete)="edit"
+              ><span
+                class="material-symbols-outlined"
+                @click="deleteRow(edit.rowIndex)"
+              >
+                delete_outline
+              </span></template
+            >
+          </va-data-table>
 
           <va-alert class="mt-3" border="left">
             <span>
               Number of filtered items:
-              <va-chip>{{ filteredCount }}</va-chip>
+              <va-chip style="background-color:#a37b64; !important">{{
+                filteredCount
+              }}</va-chip>
             </span>
           </va-alert>
         </div>
         <div class="flex md1"></div>
       </div>
     </div>
+
+    <!-- Add User -->
+    <div>
+      <va-modal
+        v-model="showModalAdd"
+        size="large"
+        fixed-layout
+        no-outside-dismiss
+        hide-default-actions
+      >
+        <va-card style="background-color: rgb(241 241 241)">
+          <va-card-title
+            style="
+              font-size: 20px;
+              background-color: #7e5338;
+              color: white;
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+            "
+          >
+            เพิ่มไฟล์
+          </va-card-title>
+          <va-card-content style="color: black">
+            <br />
+            <br />
+            <div class="row" style="text-align: left">
+              <div class="flex md1"></div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="flex md12" style="text-align: center">
+                <va-button @click="closeModelAdd" class="customButton02">
+                  ยกเลิก
+                </va-button>
+                &nbsp;
+                <va-button class="customButton01" @click="CreateFile">
+                  บันทึก
+                </va-button>
+              </div>
+            </div>
+          </va-card-content>
+        </va-card>
+      </va-modal>
+    </div>
   </body>
 </template>
 
 <script>
 import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   name: "FileManagement",
   components: {},
   data() {
-    const users = [
-      {
-        id: 1,
-        name: "Leanne Graham",
-        username: "Bret",
-        email: "Sincere@april.biz",
-        phone: "1-770-736-8031 x56442",
-        website: "hildegard.org",
-      },
-      {
-        id: 2,
-        name: "Ervin Howell",
-        username: "Antonette",
-        email: "Shanna@melissa.tv",
-        phone: "010-692-6593 x09125",
-        website: "anastasia.net",
-      },
-      {
-        id: 3,
-        name: "Clementine Bauch",
-        username: "Samantha",
-        email: "Nathan@yesenia.net",
-        phone: "1-463-123-4447",
-        website: "ramiro.info",
-      },
-      {
-        id: 4,
-        name: "Patricia Lebsack",
-        username: "Karianne",
-        email: "Julianne.OConner@kory.org",
-        phone: "493-170-9623 x156",
-        website: "kale.biz",
-      },
-      {
-        id: 5,
-        name: "Chelsey Dietrich",
-        username: "Kamren",
-        email: "Lucio_Hettinger@annie.ca",
-        phone: "(254)954-1289",
-        website: "demarco.info",
-      },
-      {
-        id: 1,
-        name: "Leanne Graham",
-        username: "Bret",
-        email: "Sincere@april.biz",
-        phone: "1-770-736-8031 x56442",
-        website: "hildegard.org",
-      },
-      {
-        id: 2,
-        name: "Ervin Howell",
-        username: "Antonette",
-        email: "Shanna@melissa.tv",
-        phone: "010-692-6593 x09125",
-        website: "anastasia.net",
-      },
-      {
-        id: 3,
-        name: "Clementine Bauch",
-        username: "Samantha",
-        email: "Nathan@yesenia.net",
-        phone: "1-463-123-4447",
-        website: "ramiro.info",
-      },
-      {
-        id: 4,
-        name: "Patricia Lebsack",
-        username: "Karianne",
-        email: "Julianne.OConner@kory.org",
-        phone: "493-170-9623 x156",
-        website: "kale.biz",
-      },
-      {
-        id: 5,
-        name: "Chelsey Dietrich",
-        username: "Kamren",
-        email: "Lucio_Hettinger@annie.ca",
-        phone: "(254)954-1289",
-        website: "demarco.info",
-      },
-      {
-        id: 1,
-        name: "Leanne Graham",
-        username: "Bret",
-        email: "Sincere@april.biz",
-        phone: "1-770-736-8031 x56442",
-        website: "hildegard.org",
-      },
-      {
-        id: 2,
-        name: "Ervin Howell",
-        username: "Antonette",
-        email: "Shanna@melissa.tv",
-        phone: "010-692-6593 x09125",
-        website: "anastasia.net",
-      },
-      {
-        id: 3,
-        name: "Clementine Bauch",
-        username: "Samantha",
-        email: "Nathan@yesenia.net",
-        phone: "1-463-123-4447",
-        website: "ramiro.info",
-      },
-      {
-        id: 4,
-        name: "Patricia Lebsack",
-        username: "Karianne",
-        email: "Julianne.OConner@kory.org",
-        phone: "493-170-9623 x156",
-        website: "kale.biz",
-      },
-      {
-        id: 5,
-        name: "Chelsey Dietrich",
-        username: "Kamren",
-        email: "Lucio_Hettinger@annie.ca",
-        phone: "(254)954-1289",
-        website: "demarco.info",
-      },
-    ];
+    var fileList = [];
 
     const columns = [
-      { key: "id", sortable: true },
-      { key: "username", sortable: true },
-      { key: "name", sortable: true },
-      { key: "email", sortable: true },
-      { key: "phone" },
+      { key: "delete", label: "ลบ" },
+      { key: "file_name", label: "ชื่อ", sortable: true },
+      { key: "file_type", label: "ประเภท", sortable: true },
+      { key: "file_size", label: "ขนาด", sortable: true },
+      { key: "ref", label: "อ้างอิงแหล่งจัดเก็บ", sortable: true },
+      { key: "create_by", label: "ผู้สร้าง", sortable: true },
+      { key: "create_date", label: "วันที่สร้าง", sortable: true },
     ];
 
     return {
-      items: users,
+      //urlBackend: "https://jet44.app.ruk-com.cloud", //Production
+      urlBackend: "http://localhost:3000", //Local
+      key: 1,
+      items: fileList,
       columns,
       filter: "",
       useCustomFilteringFn: false,
-      filteredCount: users.length,
+      filteredCount: fileList.length,
       minimized: false,
       userLogin: this.$route.params.userLogin,
+      fname: "",
+      lname: "",
+      showModalAdd: false,
     };
   },
 
@@ -237,7 +193,92 @@ export default {
     },
   },
 
+  mounted() {
+    this.getUserById();
+    this.getFileList();
+  },
+
   methods: {
+    getUserById() {
+      axios
+        .get(this.urlBackend + "/userById/" + this.userLogin, {
+          headers: { "Access-Control-Allow-Origin": "*" },
+        })
+        .then((response) => {
+          this.fname = response.data.data.first_name;
+          this.lname = response.data.data.last_name;
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire("มีข้อผิดพลาด", error.message, "error");
+        });
+    },
+
+    deleteRow(index) {
+      Swal.fire({
+        title: "ยืนยัน",
+        text: "คุณต้องการลบไฟล์ใช่หรือไม่",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "green",
+        cancelButtonColor: "red",
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+        reverseButtons: true,
+        focusCancel: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let fileListTmp = Array.from(this.fileList);
+          let deleteObj = fileListTmp.splice(this.fileList.indexOf(index), 1);
+          this.key = this.key++;
+          this.DeleteFile(deleteObj.id);
+        }
+      });
+    },
+
+    DeleteFile(id) {
+      let self = this;
+      axios
+        .delete(this.urlBackend + "/deleteFile/" + id)
+        .then(function (response) {
+          console.log(response);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "ลบข้อมูลสำเร็จ",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then((result) => {
+            console.log(result);
+            self.getFileList();
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+          Swal.fire({
+            title: "พบข้อผิดพลาด",
+            text: error.message,
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        });
+    },
+
+    getFileList() {
+      axios
+        .get(this.urlBackend + "/fileList", {
+          headers: { "Access-Control-Allow-Origin": "*" },
+        })
+        .then((response) => {
+          this.fileList = response.data.data;
+          this.key = this.key++;
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire("มีข้อผิดพลาด", error.message, "error");
+        });
+    },
+
     filterExact(source) {
       if (this.filter === "") {
         return true;
@@ -262,6 +303,20 @@ export default {
         name: "UserManagement",
         params: { userLogin: this.userLogin },
       });
+    },
+
+    openModelAdd(index) {
+      this.showModalAdd = true;
+      console.log(index);
+    },
+
+    closeModelAdd(index) {
+      this.showModalAdd = false;
+      console.log(index);
+    },
+
+    CreateFile() {
+      alert();
     },
 
     logOut() {

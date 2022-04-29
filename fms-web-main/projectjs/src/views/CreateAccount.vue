@@ -7,7 +7,7 @@
         <va-card-title
           style="
             font-size: 20px;
-            background-color: #0ca0b3;
+            background-color: #7e5338;
             color: white;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
@@ -38,7 +38,7 @@
           </div>
           <div class="row" style="text-align: left">
             <div class="flex md5">
-              <va-input class="mb-4" v-model="userName" label="Username" />
+              <va-input class="mb-4" v-model="userName" label="ชื่อผู้ใช้งาน" />
             </div>
             <div class="flex md1"></div>
             <div class="flex md5">
@@ -46,7 +46,7 @@
                 type="password"
                 class="mb-4"
                 v-model="password"
-                label="Password"
+                label="รหัสผ่าน"
               />
             </div>
           </div>
@@ -88,8 +88,7 @@ export default {
     email: "",
     phone: "",
     userName: "",
-    password: "",
-    confirmPassword: "",
+    password: ""
   }),
 
   methods: {

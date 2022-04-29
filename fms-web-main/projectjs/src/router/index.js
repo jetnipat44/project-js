@@ -32,4 +32,8 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next)=>{
+  document.title = "File Management System"
+  next()
+})
 export default router;
