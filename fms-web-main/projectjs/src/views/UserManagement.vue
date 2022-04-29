@@ -1,150 +1,196 @@
 <template>
-  <va-navbar color="primary" shape class="mb-2">
-    <template #left>
-      <va-navbar-item style="font-size: 25px;">
-        การจัดการไฟล์ต่าง ๆ
-      </va-navbar-item>
-    </template>
-    <template #center>
-      <va-navbar-item></va-navbar-item>
-    </template>
-    <template #right>
-      <va-navbar-item>
-        คุณเจตนิพัทธ์ ประกอบนา
-        <va-avatar
-          size="small"
-          src="https://play-lh.googleusercontent.com/tIeI_EWZFBCoHmV50hngRaWOqKfoERUNlROYjDuiDpc7yv_S-6_CpyNWIbN6C-aBAVtq=w240-h480-rw"
-        />
-      </va-navbar-item>
-    </template>
-  </va-navbar>
-  <br />
-  <div class="row">
-    <div class="flex md1"></div>
-    <div class="flex md10">
+  <body style="background-color: #fff">
+    <va-navbar color="primary" shape class="mb-2" @click="toggleMunu">
+      <template #left>
+        <va-navbar-item style="width: 10%">
+          <img
+            src="../assets/logo-white.png"
+            style="width: 100%"
+            alt="File Management System"
+        /></va-navbar-item>
+      </template>
+      <template #center>
+        <va-navbar-item></va-navbar-item>
+      </template>
+      <template #right>
+        <va-navbar-item
+          >คุณเจตนิพัทธ์ ประกอบนา
+          <va-avatar
+            size="small"
+            src="https://www.bsglobaltrade.com/wp-content/uploads/2016/09/person-icon.png"
+        /></va-navbar-item>
+      </template>
+    </va-navbar>
+    <div class="demo-content" style="height: 13rem; margin: -1%">
       <div class="row">
-        ค้นหา
-        <va-input
-          class="flex mb-2 md12"
-          placeholder="Filter..."
-          v-model="filter"
-        />
+        <va-sidebar
+          :minimized="minimized"
+          textColor="dark"
+          minimizedWidth="64px"
+          style="height: auto"
+        >
+          <va-sidebar-item>
+            <va-sidebar-item-content @click="goToFileManagement">
+              <span class="material-symbols-outlined"> dashboard </span>
+              <va-sidebar-item-title v-if="!minimized" style="height: 24px">
+                การจัดการไฟล์
+              </va-sidebar-item-title>
+            </va-sidebar-item-content>
+          </va-sidebar-item>
+          <va-sidebar-item :active="true">
+            <va-sidebar-item-content @click="goToUserManagement">
+              <span class="material-symbols-outlined"> description </span>
+              <va-sidebar-item-title v-if="!minimized" style="height: 24px">
+                การจัดการสมาชิก
+              </va-sidebar-item-title>
+            </va-sidebar-item-content>
+          </va-sidebar-item>
+          <va-sidebar-item>
+            <va-sidebar-item-content @click="logOut">
+              <span class="material-symbols-outlined"> logout </span>
+              <va-sidebar-item-title v-if="!minimized" style="height: 24px">
+                ออกจากระบบ
+              </va-sidebar-item-title>
+            </va-sidebar-item-content>
+          </va-sidebar-item>
+        </va-sidebar>
+        <div class="flex md1"></div>
+        <div class="flex md8">
+          <br />
+          <div class="row">
+            <va-input class="flex mb-2 md12" v-model="filter" label="ค้นหา" />
+          </div>
+
+          <va-data-table
+            :key="key"
+            :items="userList"
+            :columns="columns"
+            :filter="filter"
+            :filter-method="customFilteringFn"
+            @filtered="filteredCount = $event.items.length"
+          />
+
+          <va-alert class="mt-3" border="left">
+            <span>
+              Number of filtered items:
+              <va-chip>{{ filteredCount }}</va-chip>
+            </span>
+          </va-alert>
+        </div>
+        <div class="flex md1"></div>
       </div>
-
-      <va-data-table
-        :key="key"
-        :items="userList"
-        :columns="columns"
-        :filter="filter"
-        :filter-method="customFilteringFn"
-        @filtered="filteredCount = 1"
-      />
-
-      <va-alert class="mt-3" border="left">
-        <span>
-          Number of filtered items:
-          <va-chip>{{ filteredCount }}</va-chip>
-        </span>
-      </va-alert>
     </div>
-    <div class="flex md1"></div>
-  </div>
-  <br />
-  <div class="row">
-    <div class="flex md12">
-      <va-button @click="LogOut">ออกจากระบบ</va-button>
-    </div>
-  </div>
+  </body>
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-import axios from 'axios'
+import Swal from "sweetalert2";
+import axios from "axios";
 export default {
-  name: 'UserManagement',
+  name: "UserManagement",
   components: {},
   data() {
-    var userList = []
+    var userList = [];
 
     const columns = [
-      { key: 'id', sortable: true },
-      { key: 'username', sortable: true },
-      { key: 'first_name', sortable: true },
-      { key: 'last_name', sortable: true },
-      { key: 'email', sortable: true },
-      { key: 'phone' },
-    ]
+      { key: "first_name", label: "ชื่อ", sortable: true },
+      { key: "last_name", label: "นามสกุล", sortable: true },
+      { key: "username", label: "UserName", sortable: true },
+      { key: "email", label: "อีเมล", sortable: true },
+      { key: "phone", label: "เบอร์โทรศัพท์" },
+    ];
 
     return {
       key: 1,
       items: userList,
       columns,
-      filter: '',
+      filter: "",
       useCustomFilteringFn: false,
-      filteredCount: 1,
-    }
+      filteredCount: userList.length,
+      urlBackend: "https://jet44.app.ruk-com.cloud", //Production
+      //urlBackend: "http://localhost:3000", //Local
+      minimized: false,
+      userLogin: this.$route.params.userLogin,
+    };
   },
 
   computed: {
     customFilteringFn() {
-      return this.useCustomFilteringFn ? this.filterExact : undefined
+      return this.useCustomFilteringFn ? this.filterExact : undefined;
     },
   },
 
   mounted() {
-    this.getUserList()
+    this.getUserList();
   },
   methods: {
     getUserList() {
       axios
-        .get('https://jet44.app.ruk-com.cloud/userList', {
-          headers: { 'Access-Control-Allow-Origin': '*' },
+        .get(this.urlBackend + "/userList", {
+          headers: { "Access-Control-Allow-Origin": "*" },
         })
         .then((response) => {
-          console.log('-----------------------------', response.data.data)
-          this.userList = response.data.data
-          this.key = this.key++
+          this.userList = response.data.data;
+          this.key = this.key++;
         })
         .catch((error) => {
-          console.log(error)
-          Swal.fire('มีข้อผิดพลาด', error.message, 'error')
-        })
+          console.log(error);
+          Swal.fire("มีข้อผิดพลาด", error.message, "error");
+        });
     },
     filterExact(source) {
-      if (this.filter === '') {
-        return true
+      if (this.filter === "") {
+        return true;
       }
 
-      return source?.toString?.() === this.filter
+      return source?.toString?.() === this.filter;
     },
 
-    LogOut() {
+    toggleMunu() {
+      this.minimized = !this.minimized;
+    },
+
+    goToFileManagement() {
+      this.$router.push({
+        name: "FileManagement",
+        params: { userLogin: this.userLogin },
+      });
+    },
+
+    goToUserManagement() {
+      this.$router.push({
+        name: "UserManagement",
+        params: { userLogin: this.userLogin },
+      });
+    },
+
+    logOut() {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger',
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger",
         },
         buttonsStyling: false,
-      })
+      });
 
       swalWithBootstrapButtons
         .fire({
-          title: 'คุณต้องการออกจากระบบ<br>ใช่หรือไม่?',
-          text: '',
-          icon: 'warning',
+          title: "ยืนยัน",
+          text: "คุณต้องการออกจากระบบใช่หรือไม่?",
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonText: 'ใช่',
-          cancelButtonText: 'ไม่ใช่',
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
           reverseButtons: true,
         })
         .then((result) => {
           if (result.isConfirmed) {
-            this.$router.push({ name: 'LogIn' })
+            this.$router.push({ name: "LogIn" });
           }
-        })
+        });
     },
   },
-}
+};
 </script>
 
 <style>
@@ -177,5 +223,9 @@ export default {
   color: #fff;
   background-color: #dc3545;
   border-color: #dc3545;
+}
+
+.va-navbar__left {
+  width: 100% !important;
 }
 </style>

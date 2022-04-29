@@ -16,12 +16,12 @@ const routes = [
     component: CreateAccountView,
   },
   {
-    path: "/FileManagement",
+    path: "/FileManagement/:userLogin",
     name: "FileManagement",
     component: FileManagementView,
   },
   {
-    path: "/UserManagement",
+    path: "/UserManagement/:userLogin",
     name: "UserManagement",
     component: UserManagementView,
   },
