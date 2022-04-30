@@ -130,7 +130,13 @@
             <br />
             <br />
             <div class="row" style="text-align: left">
-              <div class="flex md1"></div>
+              <div class="flex md12">
+                <va-file-upload v-model="basic" id="avatar" dropzone />
+              </div>
+            </div>
+
+            <div class="row" style="text-align: left">
+              <div class="flex md12"></div>
             </div>
             <br />
             <div class="row">
@@ -139,7 +145,7 @@
                   ยกเลิก
                 </va-button>
                 &nbsp;
-                <va-button class="customButton01" @click="CreateFile">
+                <va-button class="customButton01" @click="CreateFile()">
                   บันทึก
                 </va-button>
               </div>
@@ -184,6 +190,7 @@ export default {
       fname: "",
       lname: "",
       showModalAdd: false,
+      basic: [],
     };
   },
 
@@ -312,11 +319,36 @@ export default {
 
     closeModelAdd(index) {
       this.showModalAdd = false;
+      this.basic = [];
       console.log(index);
     },
 
     CreateFile() {
-      alert();
+      console.log(this.basic);
+
+      for (let i = 0; i < this.basic.length; i++) {
+        let formData = new FormData();
+        formData.append("file", this.basic[i]);
+        formData.append("id", "5555");
+        axios
+          .post(this.urlBackend + "/uploadFile", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(function () {
+            console.log("SUCCESS!!");
+          })
+          .catch(function () {
+            console.log("FAILURE!!");
+          });
+      }
+    },
+
+    CFile() {
+      const selectedFile = document.getElementById("avatar").files[0];
+      console.log(selectedFile);
+      console.log(this.$$refs.file);
     },
 
     logOut() {

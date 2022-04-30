@@ -3,6 +3,13 @@ const path = require('path')
 const cors = require('cors')
 const app = express()
 const bp = require('body-parser')
+const fs = require('fs');
+
+
+const formData = require('express-form-data');
+
+app.use(formData.parse());
+
 
 require('dotenv').config()
 
@@ -21,6 +28,89 @@ const dbHost = 'localhost'
 const dbUser = 'root'
 const dbPassword = 'root'
 const dbDatabase = 'fms'
+
+// ========== /upload ==========
+app.get('/upload', (req, res) => {
+
+  fs.readFile('C:\\Users\\Supattalak\\Downloads\\icon.png', 'utf8', (err, resp) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    //console.log(data);
+
+    const axios = require('axios');
+
+    axios
+      .post('https://www.googleapis.com/upload/drive/v3/files', resp, {
+        params: { 'uploadType': 'media' },
+        headers: {
+          'cContent-Type': 'image/png',
+          'Authorization': 'Bearer ya29.A0ARrdaM9aetig_oCgqYgi7ZjfnomeSnHHsK0dihMK2kA44gEg7Viu7iXtk0M6xXsZ1b4H4QVAu8M5kM19wuy_LSjgEy5nmAYUliHRIy3YTSQFMyxZh3HycEGeinNxETr1LxFwtefE7Z5PKJ5bJCHGjYEq7Jw9'
+        }
+      })
+      .then(res => {
+        console.log(`statusCode: ${res.status}`);
+        console.log(res);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    res.status(200).json({
+      message: 'Success',
+    })
+  });
+
+
+})
+
+
+// ========== /get ==========
+app.get('/get', (req, res) => {
+
+  const axios = require('axios');
+
+  return axios
+    .get('https://www.googleapis.com/drive/v3/files/1NxqGq6-h_C94lWPrUGBQCzLGmRCKws9E?alt=media', {
+      headers: {
+        'Authorization': 'Bearer ya29.A0ARrdaM9aetig_oCgqYgi7ZjfnomeSnHHsK0dihMK2kA44gEg7Viu7iXtk0M6xXsZ1b4H4QVAu8M5kM19wuy_LSjgEy5nmAYUliHRIy3YTSQFMyxZh3HycEGeinNxETr1LxFwtefE7Z5PKJ5bJCHGjYEq7Jw9'
+      }
+    })
+    .then(res => {
+      console.log(`statusCode: ${res.status}`);
+      console.log(res);
+      return res
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+
+  // res.status(200).json({
+  //   message: 'Success',
+  // })
+})
+
+
+// ========== /uploadFile ==========
+app.post('/uploadFile', (req, res) => {
+  console.log('/uploadFile');
+  console.log(req.files);
+  console.log(req.body);
+
+  if (!file) {
+    return res.status(400).send({ message: 'Please upload a file.' });
+  }
+  var sql = "INSERT INTO `file`(`name`) VALUES ('" + req.file.filename + "')";
+  var query = db.query(sql, function (err, result) {
+    return res.send({ message: 'File is successfully.', file });
+  });
+
+  return 0;
+
+})
+
 
 // ========== /connectAPI ==========
 app.get('/connectAPI', (req, res) => {
@@ -266,16 +356,16 @@ app.get('/login/:username/:password', (req, res) => {
   res.status(200).json({
     message: 'เรียกข้อมูลสำเร็จ',
     data: {
-        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
-        "first_name": "Supattalak",
-        "last_name": "Phoha",
-        "email": "supattalak@gmail.com",
-        "phone": "0812345678",
-        "username": "coke",
-        "password": "1234",
-        "is_active": "1",
-        "is_admin": "1",
-      }
+      "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+      "first_name": "Supattalak",
+      "last_name": "Phoha",
+      "email": "supattalak@gmail.com",
+      "phone": "0812345678",
+      "username": "coke",
+      "password": "1234",
+      "is_active": "1",
+      "is_admin": "1",
+    }
   })
   // =============================
 })
@@ -317,16 +407,16 @@ app.get('/userById/:id', (req, res) => {
   res.status(200).json({
     message: 'เรียกข้อมูลสำเร็จ',
     data: {
-        "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
-        "first_name": "Supattalak",
-        "last_name": "Phoha",
-        "email": "supattalak@gmail.com",
-        "phone": "0812345678",
-        "username": "coke",
-        "password": "1234",
-        "is_active": "1",
-        "is_admin": "1",
-      }
+      "id": "514c61b0-e51f-48f6-8e6c-dda6076b435f",
+      "first_name": "Supattalak",
+      "last_name": "Phoha",
+      "email": "supattalak@gmail.com",
+      "phone": "0812345678",
+      "username": "coke",
+      "password": "1234",
+      "is_active": "1",
+      "is_admin": "1",
+    }
   })
   // =============================
 })
