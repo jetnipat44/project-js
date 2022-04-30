@@ -97,15 +97,16 @@ app.get('/get', (req, res) => {
 app.post('/uploadFile', (req, res) => {
   console.log('/uploadFile');
   console.log(req.files);
+
   console.log(req.body);
 
-  if (!file) {
-    return res.status(400).send({ message: 'Please upload a file.' });
-  }
-  var sql = "INSERT INTO `file`(`name`) VALUES ('" + req.file.filename + "')";
-  var query = db.query(sql, function (err, result) {
-    return res.send({ message: 'File is successfully.', file });
-  });
+  // if (!files) {
+  //   return res.status(400).send({ message: 'Please upload a file.' });
+  // }
+  // var sql = "INSERT INTO `file`(`name`) VALUES ('" + req.file.filename + "')";
+  // var query = db.query(sql, function (err, result) {
+  //   return res.send({ message: 'File is successfully.', file });
+  // });
 
   return 0;
 
