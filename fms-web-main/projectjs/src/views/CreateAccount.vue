@@ -1,9 +1,14 @@
 <template>
-<br /><br /><br /><br /><br /><br />
-  <div class="row" style="padding-top: 2%; padding-bottom: 2%">
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <div class="row" style="padding-top: 2%; padding-bottom: 2%;">
     <div class="flex md3"></div>
     <div class="flex md6">
-      <va-card style="background-color: rgb(241 241 241)">
+      <va-card style="background-color: rgb(241 241 241);">
         <va-card-title
           style="
             font-size: 20px;
@@ -15,10 +20,10 @@
         >
           สร้างบัญชีผู้ใช้งาน
         </va-card-title>
-        <va-card-content style="color: black">
+        <va-card-content style="color: black;">
           <br />
           <br />
-          <div class="row" style="text-align: left">
+          <div class="row" style="text-align: left;">
             <div class="flex md5">
               <va-input class="mb-4" v-model="firstName" label="ชื่อ" />
             </div>
@@ -27,7 +32,7 @@
               <va-input class="mb-4" v-model="lastName" label="นามสกุล" />
             </div>
           </div>
-          <div class="row" style="text-align: left">
+          <div class="row" style="text-align: left;">
             <div class="flex md5">
               <va-input class="mb-4" v-model="email" label="อีเมล" />
             </div>
@@ -36,7 +41,7 @@
               <va-input class="mb-4" v-model="phone" label="เบอร์โทรศัพท์" />
             </div>
           </div>
-          <div class="row" style="text-align: left">
+          <div class="row" style="text-align: left;">
             <div class="flex md5">
               <va-input class="mb-4" v-model="userName" label="ชื่อผู้ใช้งาน" />
             </div>
@@ -74,21 +79,21 @@
 </template>
 
 <script>
-import Swal from "sweetalert2";
-import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
+import Swal from 'sweetalert2'
+import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 export default {
-  name: "CreateAccount",
+  name: 'CreateAccount',
   components: {},
   data: () => ({
-    // urlBackend: 'http://localhost:3000',
-    urlBackend: "https://jet44.app.ruk-com.cloud",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    userName: "",
-    password: ""
+    //urlBackend: 'http://localhost:3000',
+    urlBackend: 'https://jet44.app.ruk-com.cloud',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    userName: '',
+    password: '',
   }),
 
   methods: {
@@ -101,46 +106,53 @@ export default {
         userName: this.userName,
         password: this.password,
         id: uuidv4(),
-      };
-      console.log(data);
+      }
+      console.log(data)
 
-      if (this.firstName == "" || this.lastName == "" || this.email == "" || this.phone == "" || this.userName == "" || this.password == "") {
+      if (
+        this.firstName == '' ||
+        this.lastName == '' ||
+        this.email == '' ||
+        this.phone == '' ||
+        this.userName == '' ||
+        this.password == ''
+      ) {
         Swal.fire({
-          title: "พบข้อผิดพลาด",
-          text: "กรุณากรอกข้อมูลให้ครบถ้วน",
-          icon: "error",
-          confirmButtonText: "ตกลง",
-        });
+          title: 'พบข้อผิดพลาด',
+          text: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+          icon: 'error',
+          confirmButtonText: 'ตกลง',
+        })
       } else {
-        let self = this;
+        let self = this
         axios
-          .post(this.urlBackend + "/createUser", data)
+          .post(this.urlBackend + '/createUser', data)
           .then(function (response) {
-            console.log(response);
+            console.log(response)
             Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "บันทึกข้อมูลสำเร็จ",
+              position: 'center',
+              icon: 'success',
+              title: 'บันทึกข้อมูลสำเร็จ',
               showConfirmButton: false,
               timer: 1500,
             }).then((result) => {
-              console.log(result);
-              self.$router.push({ name: "LogIn" });
-            });
+              console.log(result)
+              self.$router.push({ name: 'LogIn' })
+            })
           })
           .catch(function (error) {
-            console.log(error);
+            console.log(error)
             Swal.fire({
-              title: "พบข้อผิดพลาด",
+              title: 'พบข้อผิดพลาด',
               text: error.message,
-              icon: "error",
-              confirmButtonText: "ตกลง",
-            });
-          });
+              icon: 'error',
+              confirmButtonText: 'ตกลง',
+            })
+          })
       }
     },
   },
-};
+}
 </script>
 
 <style>
@@ -150,18 +162,18 @@ export default {
 
 .va-input__label {
   color: black !important;
-  font-family: "Courier New" !important;
+  font-family: 'Courier New' !important;
   font-size: 70% !important;
 }
 
 .customButton01 {
-  font-family: "Courier New" !important;
+  font-family: 'Courier New' !important;
   font-size: 70% !important;
   background-color: green !important;
 }
 
 .customButton02 {
-  font-family: "Courier New" !important;
+  font-family: 'Courier New' !important;
   font-size: 70% !important;
   background-color: red !important;
 }
