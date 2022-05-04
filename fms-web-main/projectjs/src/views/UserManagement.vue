@@ -1,6 +1,12 @@
 <template>
   <body style="background-color: #fff;">
-    <va-navbar color="#7e5338" shape class="mb-2" @click="toggleMunu">
+    <va-navbar
+      color="#7e5338"
+      shape
+      class="mb-2"
+      @click="toggleMunu"
+      style="z-index: 5000;"
+    >
       <template #left>
         <va-navbar-item style="width: 10%;">
           <img
@@ -58,6 +64,12 @@
               </va-sidebar-item-title>
             </va-sidebar-item-content>
           </va-sidebar-item>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <br />
           <br />
           <br />
@@ -318,6 +330,20 @@
         </va-card>
       </va-modal>
     </div>
+    <v-overlay :value="loadingData" style="z-index: 1000; text-align: center;">
+      <v-progress-circular
+        :active="loadingData"
+        :indeterminate="loadingData"
+        color="primary"
+        size="100"
+      ></v-progress-circular>
+      <br />
+      <br />
+      กำลังโหลดข้อมูล กรุณารอสักครู่...
+    </v-overlay>
+    <div class="flex lg6 xs12 py-4" style="z-index: 10000; text-align: center;">
+      <va-progress-circle :active="loadingData" :indeterminate="loadingData" />
+    </div>
   </body>
 </template>
 
@@ -340,19 +366,21 @@ export default {
       { key: 'username', label: 'ชื่อผู้ใช้งาน', sortable: true },
       { key: 'email', label: 'อีเมล', sortable: true },
       { key: 'phone', label: 'เบอร์โทรศัพท์' },
+      { key: 'totalSize', label: 'ความจุที่ใช้ไป(KB)' },
       { key: 'is_active', label: 'สถานะใช้งาน' },
       { key: 'is_admin', label: 'ผู้ดูแลระบบ' },
     ]
 
     return {
+      loadingData: true,
       key: 1,
       items: userList,
       columns,
       filter: '',
       useCustomFilteringFn: false,
       filteredCount: userList.length,
-      urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
-      //urlBackend: 'http://localhost:3000', //Local
+      //urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
+      urlBackend: 'http://localhost:3000', //Local
       minimized: false,
       userLogin: this.$route.params.userLogin,
       showModal: false,

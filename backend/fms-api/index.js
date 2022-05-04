@@ -1,8 +1,8 @@
 const express = require('express')
-const fileupload = require("express-fileupload");
+const fileupload = require('express-fileupload')
 const path = require('path')
 const cors = require('cors')
-// const bp = require('body-parser')
+const bp = require('body-parser')
 // const fs = require('fs')
 // require('dotenv').config()
 const axios = require('axios')
@@ -15,47 +15,47 @@ const axios = require('axios')
 const app = express()
 // app.use(formData.parse());
 
-// app.set('view engine', 'ejs');
+app.set('view engine', 'ejs')
 app.use(cors())
-// app.use(bp.json())
-// app.use(bp.urlencoded({ extended: true }))
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 
-app.use(fileupload());
+app.use(fileupload())
 //========== Production ==========
-const dbHost = process.env.DB_HOST
-const dbUser = process.env.DB_USER
-const dbPassword = process.env.DB_PASS
-const dbDatabase = process.env.DB_NAME
+// const dbHost = process.env.DB_HOST
+// const dbUser = process.env.DB_USER
+// const dbPassword = process.env.DB_PASS
+// const dbDatabase = process.env.DB_NAME
 
-// // ========== Local ==========
-// const dbHost = 'localhost'
-// const dbUser = 'root'
-// const dbPassword = '1234'
-// const dbDatabase = 'fms'
+// ========== Local ==========
+const dbHost = 'localhost'
+const dbUser = 'root'
+const dbPassword = '1234'
+const dbDatabase = 'fms'
 
 // ========== /upload ==========
 app.post('/uploadFileToOpenProject', (req, res) => {
   if (req.files) {
     var file = req.files.file
-    const FormData = require('form-data');
+    const FormData = require('form-data')
     let formData = new FormData()
-    formData.append('metadata', '{"fileName":"' + file.name + '"}');
-    formData.append('file', file.data, { filename: file.name });
+    formData.append('metadata', '{"fileName":"' + file.name + '"}')
+    formData.append('file', file.data, { filename: file.name })
 
     axios
       .post('https://community.openproject.org/api/v3/attachments', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        }
+        },
       })
       .then(function (resp) {
-        console.log(resp.data);
+        console.log(resp.data)
         res.status(200).json({
           message: resp.data._links.downloadLocation.href,
         })
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error)
         res.status(400).json({
           message: error,
         })
@@ -91,10 +91,10 @@ app.post('/uploadFile', (req, res) => {
       ' uuid() ' +
       ', ' +
       "'" +
-      fileObj.originalFilename +
+      fileObj.name +
       "', " +
       "'" +
-      fileObj.type +
+      fileObj.mimetype +
       "', " +
       ' ' +
       fileObj.size +
@@ -149,7 +149,8 @@ app.get('/userList', (req, res) => {
     console.log('You are connected!')
   })
 
-  var sql = 'SELECT * FROM users'
+  var sql =
+    "SELECT u.*,fileGroup.totalSize FROM users u LEFT JOIN (SELECT f.create_by,SUM(f.file_size) AS 'totalSize' FROM files f GROUP BY f.create_by) fileGroup ON u.id = fileGroup.create_by"
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err)
