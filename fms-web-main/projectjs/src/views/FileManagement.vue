@@ -225,8 +225,8 @@ export default {
     ]
 
     return {
-      //urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
-      urlBackend: 'http://localhost:3000', //Local
+      urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
+      // urlBackend: 'http://localhost:3000', //Local
       key: 1,
       items: fileList,
       columns,

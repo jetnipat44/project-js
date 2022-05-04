@@ -67,8 +67,8 @@ export default {
   data: () => ({
     userName: '',
     password: '',
-    //urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
-    urlBackend: 'http://localhost:3000', //Local
+    urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
+    // urlBackend: 'http://localhost:3000', //Local
   }),
   methods: {
     Login() {

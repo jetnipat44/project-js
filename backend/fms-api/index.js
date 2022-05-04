@@ -22,16 +22,16 @@ app.use(bp.urlencoded({ extended: true }))
 
 app.use(fileupload())
 //========== Production ==========
-// const dbHost = process.env.DB_HOST
-// const dbUser = process.env.DB_USER
-// const dbPassword = process.env.DB_PASS
-// const dbDatabase = process.env.DB_NAME
+const dbHost = process.env.DB_HOST
+const dbUser = process.env.DB_USER
+const dbPassword = process.env.DB_PASS
+const dbDatabase = process.env.DB_NAME
 
 // ========== Local ==========
-const dbHost = 'localhost'
-const dbUser = 'root'
-const dbPassword = '1234'
-const dbDatabase = 'fms'
+// const dbHost = 'localhost'
+// const dbUser = 'root'
+// const dbPassword = '1234'
+// const dbDatabase = 'fms'
 
 // ========== /upload ==========
 app.post('/uploadFileToOpenProject', (req, res) => {

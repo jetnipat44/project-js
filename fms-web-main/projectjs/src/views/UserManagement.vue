@@ -379,8 +379,8 @@ export default {
       filter: '',
       useCustomFilteringFn: false,
       filteredCount: userList.length,
-      //urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
-      urlBackend: 'http://localhost:3000', //Local
+      urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
+      //urlBackend: 'http://localhost:3000', //Local
       minimized: false,
       userLogin: this.$route.params.userLogin,
       showModal: false,

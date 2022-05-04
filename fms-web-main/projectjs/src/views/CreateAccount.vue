@@ -86,8 +86,8 @@ export default {
   name: 'CreateAccount',
   components: {},
   data: () => ({
-    urlBackend: 'http://localhost:3000',
-    //urlBackend: 'https://jet44.app.ruk-com.cloud',
+    // urlBackend: 'http://localhost:3000',
+    urlBackend: 'https://jet44.app.ruk-com.cloud',
     firstName: '',
     lastName: '',
     email: '',
