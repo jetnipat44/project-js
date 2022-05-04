@@ -218,7 +218,12 @@ export default {
       { key: 'edit', label: 'แก้ไข', fixedColumns: true },
       { key: 'file_name', label: 'ชื่อ', sortable: true },
       { key: 'file_type', label: 'ประเภท', sortable: true },
-      { key: 'file_size', label: 'ขนาด', sortable: true },
+      {
+        key: 'file_size',
+        label: 'ขนาด(KB)',
+        sortable: true,
+        dataType: 'number',
+      },
       // { key: 'ref', label: 'อ้างอิงแหล่งจัดเก็บ', sortable: true },
       { key: 'create_by', label: 'ผู้สร้าง', sortable: true },
       { key: 'create_date', label: 'วันที่สร้าง', sortable: true },
@@ -226,7 +231,7 @@ export default {
 
     return {
       urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
-      // urlBackend: 'http://localhost:3000', //Local
+      //urlBackend: 'http://localhost:3000', //Local
       key: 1,
       items: fileList,
       columns,
