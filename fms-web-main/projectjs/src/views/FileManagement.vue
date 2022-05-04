@@ -471,7 +471,7 @@ export default {
                   },
                 })
                 .then(function () {
-                  if (i + 1 == this.basic.length) {
+                  if (i + 1 == self.basic.length) {
                     Swal.fire({
                       position: 'center',
                       icon: 'success',
