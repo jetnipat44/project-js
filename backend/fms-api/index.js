@@ -1,7 +1,7 @@
 const express = require('express')
 const fileupload = require("express-fileupload");
 const path = require('path')
-// const cors = require('cors')
+const cors = require('cors')
 // const bp = require('body-parser')
 // const fs = require('fs')
 // require('dotenv').config()
@@ -16,7 +16,7 @@ const app = express()
 // app.use(formData.parse());
 
 // app.set('view engine', 'ejs');
-// app.use(cors())
+app.use(cors())
 // app.use(bp.json())
 // app.use(bp.urlencoded({ extended: true }))
 
@@ -34,13 +34,9 @@ const dbDatabase = process.env.DB_NAME
 // const dbDatabase = 'fms'
 
 // ========== /upload ==========
-app.post('/uploadFile1', (req, res) => {
-  console.log(req.files)
+app.post('/uploadFileToOpenProject', (req, res) => {
   if (req.files) {
     var file = req.files.file
-
-    console.log("file=======", file);
-
     const FormData = require('form-data');
     let formData = new FormData()
     formData.append('metadata', '{"fileName":"' + file.name + '"}');
@@ -48,7 +44,6 @@ app.post('/uploadFile1', (req, res) => {
 
     axios
       .post('https://community.openproject.org/api/v3/attachments', formData, {
-        //.post('https:local', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -78,6 +73,7 @@ app.post('/uploadFile', (req, res) => {
   var fileObj = req.files.file
   console.log(fileObj)
   var createBy = req.body.userLogin
+  var ref = req.body.ref
   var mysql = require('mysql')
   var con = mysql.createConnection({
     host: dbHost,
@@ -104,7 +100,7 @@ app.post('/uploadFile', (req, res) => {
       fileObj.size +
       ', ' +
       "'" +
-      fileObj.ref +
+      ref +
       "', " +
       "'" +
       createBy +
@@ -113,6 +109,10 @@ app.post('/uploadFile', (req, res) => {
     con.query(sql, function (err, result) {
       if (err) {
         console.log(err)
+        res.status(400).json({
+          message: err,
+          data: false,
+        })
       } else {
         res.status(200).json({
           message: 'เรียกข้อมูลสำเร็จ',
@@ -153,6 +153,9 @@ app.get('/userList', (req, res) => {
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err)
+      res.status(400).json({
+        message: err,
+      })
     } else {
       var obj = []
       result.forEach((element) => {
@@ -257,6 +260,9 @@ app.get('/fileList/:userLogin', (req, res) => {
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err)
+      res.status(400).json({
+        message: err,
+      })
     } else {
       fileList = result
       res.status(200).json({
@@ -376,6 +382,9 @@ app.get('/login/:username/:password', (req, res) => {
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err)
+      res.status(400).json({
+        message: err,
+      })
     } else {
       user = result[0]
       res.status(200).json({
@@ -427,6 +436,9 @@ app.get('/userById/:id', (req, res) => {
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err)
+      res.status(400).json({
+        message: err,
+      })
     } else {
       user = result[0]
       res.status(200).json({
@@ -500,6 +512,9 @@ app.post('/createUser', (req, res) => {
     con.query(sql, function (err, result) {
       if (err) {
         console.log(err)
+        res.status(400).json({
+          message: err,
+        })
       } else {
         console.log(result)
         console.log(result[0])
@@ -572,6 +587,9 @@ app.put('/updateUser', (req, res) => {
     con.query(sql, function (err, result) {
       if (err) {
         console.log(err)
+        res.status(400).json({
+          message: err,
+        })
       } else {
         res.status(200).json({
           message: 'เรียกข้อมูลสำเร็จ',
@@ -612,6 +630,9 @@ app.delete('/deleteUser/:id', (req, res) => {
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err)
+      res.status(400).json({
+        message: err,
+      })
     } else {
       res.status(200).json({
         message: 'เรียกข้อมูลสำเร็จ',
@@ -651,6 +672,9 @@ app.delete('/deleteFile/:id', (req, res) => {
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err)
+      res.status(400).json({
+        message: err,
+      })
     } else {
       res.status(200).json({
         message: 'เรียกข้อมูลสำเร็จ',

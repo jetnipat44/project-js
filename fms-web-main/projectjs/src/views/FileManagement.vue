@@ -386,7 +386,7 @@ export default {
     //               "Content-Type": "application/hal+json; charset=utf-8",
     //               'Access-Control-Allow-Methods': 'GET, POST',
     //  'Access-Control-Allow-Headers': 'Content-Type',
-     
+
     //             },
     //             mode: 'no-cors'
     //           }
@@ -418,47 +418,66 @@ export default {
     // },
 
     CreateFile() {
-      console.log(this.basic)
+      console.log(this.basic);
       if (this.basic.length == 0) {
         Swal.fire({
-          title: 'พบข้อผิดพลาด',
-          text: 'กรุณาเลือกไฟล์ที่ต้องการ',
-          icon: 'error',
-          confirmButtonText: 'ตกลง',
-        })
+          title: "พบข้อผิดพลาด",
+          text: "กรุณาเลือกไฟล์ที่ต้องการ",
+          icon: "error",
+          confirmButtonText: "ตกลง",
+        });
       } else {
         for (let i = 0; i < this.basic.length; i++) {
-          let formData = new FormData()
-          formData.append('file', this.basic[i])
-          formData.append('userLogin', this.userLogin)
-          let self = this
+          let formData = new FormData();
+          formData.append("file", this.basic[i]);
+          formData.append("userLogin", this.userLogin);          
+          let self = this;
           axios
-            .post(this.urlBackend + '/uploadFile1', formData, {
+            .post(self.urlBackend + "/uploadFileToOpenProject", formData, {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "multipart/form-data",
               },
             })
-            .then(function () {
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'บันทึกข้อมูลสำเร็จ',
-                showConfirmButton: false,
-                timer: 1500,
-              }).then((result) => {
-                console.log(result)
-                self.showModalAdd = false
-                self.getFileList()
-              })
+            .then(function (resp) {
+              formData.append("ref", resp.data.message);
+              axios
+                .post(self.urlBackend + "/uploadFile", formData, {
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type": "multipart/form-data",
+                  },
+                })
+                .then(function () {
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "บันทึกข้อมูลสำเร็จ",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  }).then((result) => {
+                    console.log(result);
+                    self.showModalAdd = false;
+                    self.getFileList();
+                  });
+                })
+                .catch(function (error) {
+                  Swal.fire({
+                    title: "พบข้อผิดพลาด",
+                    text: error.message,
+                    icon: "error",
+                    confirmButtonText: "ตกลง",
+                  });
+                });
             })
             .catch(function (error) {
               Swal.fire({
-                title: 'พบข้อผิดพลาด',
+                title: "พบข้อผิดพลาด",
                 text: error.message,
-                icon: 'error',
-                confirmButtonText: 'ตกลง',
-              })
-            })
+                icon: "error",
+                confirmButtonText: "ตกลง",
+              });
+            });
         }
       }
     },
