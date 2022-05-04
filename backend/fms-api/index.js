@@ -1,20 +1,26 @@
 const express = require('express')
+const fileupload = require("express-fileupload");
 const path = require('path')
-const cors = require('cors')
+// const cors = require('cors')
+// const bp = require('body-parser')
+// const fs = require('fs')
+// require('dotenv').config()
+const axios = require('axios')
+// const formData = require('express-form-data')
+// const multer = require('multer');
+// const upload = multer({
+//   dest: 'files'
+// });
+
 const app = express()
-const bp = require('body-parser')
-const fs = require('fs')
+// app.use(formData.parse());
 
-const formData = require('express-form-data')
+// app.set('view engine', 'ejs');
+// app.use(cors())
+// app.use(bp.json())
+// app.use(bp.urlencoded({ extended: true }))
 
-app.use(formData.parse())
-
-require('dotenv').config()
-
-app.use(cors())
-app.use(bp.json())
-app.use(bp.urlencoded({ extended: true }))
-
+app.use(fileupload());
 //========== Production ==========
 const dbHost = process.env.DB_HOST
 const dbUser = process.env.DB_USER
@@ -28,69 +34,42 @@ const dbDatabase = process.env.DB_NAME
 // const dbDatabase = 'fms'
 
 // ========== /upload ==========
-app.get('/upload', (req, res) => {
-  fs.readFile(
-    'C:\\Users\\Supattalak\\Downloads\\icon.png',
-    'utf8',
-    (err, resp) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      //console.log(data);
+app.post('/uploadFile1', (req, res) => {
+  console.log(req.files)
+  if (req.files) {
+    var file = req.files.file
 
-      const axios = require('axios')
+    console.log("file=======", file);
 
-      axios
-        .post('https://www.googleapis.com/upload/drive/v3/files', resp, {
-          params: { uploadType: 'media' },
-          headers: {
-            'cContent-Type': 'image/png',
-            Authorization:
-              'Bearer ya29.A0ARrdaM9aetig_oCgqYgi7ZjfnomeSnHHsK0dihMK2kA44gEg7Viu7iXtk0M6xXsZ1b4H4QVAu8M5kM19wuy_LSjgEy5nmAYUliHRIy3YTSQFMyxZh3HycEGeinNxETr1LxFwtefE7Z5PKJ5bJCHGjYEq7Jw9',
-          },
-        })
-        .then((res) => {
-          console.log(`statusCode: ${res.status}`)
-          console.log(res)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+    const FormData = require('form-data');
+    let formData = new FormData()
+    formData.append('metadata', '{"fileName":"' + file.name + '"}');
+    formData.append('file', file.data, { filename: file.name });
 
-      res.status(200).json({
-        message: 'Success',
-      })
-    },
-  )
-})
-
-// ========== /get ==========
-app.get('/get', (req, res) => {
-  const axios = require('axios')
-
-  return axios
-    .get(
-      'https://www.googleapis.com/drive/v3/files/1NxqGq6-h_C94lWPrUGBQCzLGmRCKws9E?alt=media',
-      {
+    axios
+      .post('https://community.openproject.org/api/v3/attachments', formData, {
+        //.post('https:local', formData, {
         headers: {
-          Authorization:
-            'Bearer ya29.A0ARrdaM9aetig_oCgqYgi7ZjfnomeSnHHsK0dihMK2kA44gEg7Viu7iXtk0M6xXsZ1b4H4QVAu8M5kM19wuy_LSjgEy5nmAYUliHRIy3YTSQFMyxZh3HycEGeinNxETr1LxFwtefE7Z5PKJ5bJCHGjYEq7Jw9',
-        },
-      },
-    )
-    .then((res) => {
-      console.log(`statusCode: ${res.status}`)
-      console.log(res)
-      return res
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+      .then(function (resp) {
+        console.log(resp.data);
+        res.status(200).json({
+          message: resp.data._links.downloadLocation.href,
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+        res.status(400).json({
+          message: error,
+        })
+      })
+  } else {
+    res.status(400).json({
+      message: 'ไม่พบไฟล์',
     })
-    .catch((error) => {
-      console.error(error)
-    })
-
-  // res.status(200).json({
-  //   message: 'Success',
-  // })
+  }
 })
 
 // ========== /uploadFile ==========

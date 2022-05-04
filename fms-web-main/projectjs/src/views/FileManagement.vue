@@ -1,11 +1,11 @@
 <template>
-  <body style="background-color: #fff;">
+  <body style="background-color: #fff">
     <va-navbar color="#7e5338" shape class="mb-2" @click="toggleMunu">
       <template #left>
-        <va-navbar-item style="width: 10%;">
+        <va-navbar-item style="width: 10%">
           <img
             src="../assets/logo-white.png"
-            style="width: 100%;"
+            style="width: 100%"
             alt="File Management System"
           />
         </va-navbar-item>
@@ -23,13 +23,13 @@
         </va-navbar-item>
       </template>
     </va-navbar>
-    <div class="demo-content" style="height: 13rem; margin: -1%;">
+    <div class="demo-content" style="height: 13rem; margin: -1%">
       <div class="row">
         <va-sidebar
           :minimized="minimized"
           textColor="dark"
           minimizedWidth="64px"
-          style="height: auto;"
+          style="height: auto"
         >
           <va-sidebar-item :active="true">
             <va-sidebar-item-content
@@ -37,7 +37,7 @@
               style="background-color:#a37b64; !important"
             >
               <span class="material-symbols-outlined">dashboard</span>
-              <va-sidebar-item-title v-if="!minimized" style="height: 24px;">
+              <va-sidebar-item-title v-if="!minimized" style="height: 24px">
                 การจัดการไฟล์
               </va-sidebar-item-title>
             </va-sidebar-item-content>
@@ -45,7 +45,7 @@
           <va-sidebar-item v-if="isAdminRole">
             <va-sidebar-item-content @click="goToUserManagement">
               <span class="material-symbols-outlined">description</span>
-              <va-sidebar-item-title v-if="!minimized" style="height: 24px;">
+              <va-sidebar-item-title v-if="!minimized" style="height: 24px">
                 การจัดการสมาชิก
               </va-sidebar-item-title>
             </va-sidebar-item-content>
@@ -53,7 +53,7 @@
           <va-sidebar-item>
             <va-sidebar-item-content @click="logOut">
               <span class="material-symbols-outlined">logout</span>
-              <va-sidebar-item-title v-if="!minimized" style="height: 24px;">
+              <va-sidebar-item-title v-if="!minimized" style="height: 24px">
                 ออกจากระบบ
               </va-sidebar-item-title>
             </va-sidebar-item-content>
@@ -140,7 +140,7 @@
         no-outside-dismiss
         hide-default-actions
       >
-        <va-card style="background-color: rgb(241 241 241);">
+        <va-card style="background-color: rgb(241 241 241)">
           <va-card-title
             style="
               font-size: 20px;
@@ -152,21 +152,21 @@
           >
             เพิ่มไฟล์
           </va-card-title>
-          <va-card-content style="color: black;">
+          <va-card-content style="color: black">
             <br />
             <br />
-            <div class="row" style="text-align: left;">
+            <div class="row" style="text-align: left">
               <div class="flex md12">
                 <va-file-upload v-model="basic" id="avatar" dropzone />
               </div>
             </div>
 
-            <div class="row" style="text-align: left;">
+            <div class="row" style="text-align: left">
               <div class="flex md12"></div>
             </div>
             <br />
             <div class="row">
-              <div class="flex md12" style="text-align: center;">
+              <div class="flex md12" style="text-align: center">
                 <va-button @click="closeModelAdd" class="customButton02">
                   ยกเลิก
                 </va-button>
@@ -184,172 +184,238 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-import axios from 'axios'
+import Swal from "sweetalert2";
+import axios from "axios";
 export default {
-  name: 'FileManagement',
+  name: "FileManagement",
   components: {},
   data() {
-    var fileList = []
+    var fileList = [];
 
     const columns = [
-      { key: 'delete', label: 'ลบ' },
-      { key: 'file_name', label: 'ชื่อ', sortable: true },
-      { key: 'file_type', label: 'ประเภท', sortable: true },
-      { key: 'file_size', label: 'ขนาด', sortable: true },
-      { key: 'ref', label: 'อ้างอิงแหล่งจัดเก็บ', sortable: true },
-      { key: 'create_by', label: 'ผู้สร้าง', sortable: true },
-      { key: 'create_date', label: 'วันที่สร้าง', sortable: true },
-    ]
+      { key: "delete", label: "ลบ" },
+      { key: "file_name", label: "ชื่อ", sortable: true },
+      { key: "file_type", label: "ประเภท", sortable: true },
+      { key: "file_size", label: "ขนาด", sortable: true },
+      { key: "ref", label: "อ้างอิงแหล่งจัดเก็บ", sortable: true },
+      { key: "create_by", label: "ผู้สร้าง", sortable: true },
+      { key: "create_date", label: "วันที่สร้าง", sortable: true },
+    ];
 
     return {
-      urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
-      //urlBackend: 'http://localhost:3000', //Local
+      //urlBackend: 'https://jet44.app.ruk-com.cloud', //Production
+      urlBackend: "http://localhost:3000", //Local
       key: 1,
       items: fileList,
       columns,
-      filter: '',
+      filter: "",
       useCustomFilteringFn: false,
       filteredCount: fileList.length,
       minimized: false,
       userLogin: this.$route.params.userLogin,
-      fname: '',
-      lname: '',
+      fname: "",
+      lname: "",
       showModalAdd: false,
       isAdminRole: false,
       basic: [],
-    }
+      testDL:
+        "https://rgw1.netways.de/saasdataop/community/attachment/file/31775/download.jfif?response-content-disposition=inline&AWSAccessKeyId=c98f3ee5-8ef0-40b7-ad68-90e396d26a90&Signature=Fk4sVlmra9vR4xi3b95OZ%2Bm7DpY%3D&Expires=1651625668",
+    };
   },
 
   computed: {
     customFilteringFn() {
-      return this.useCustomFilteringFn ? this.filterExact : undefined
+      return this.useCustomFilteringFn ? this.filterExact : undefined;
     },
   },
 
   mounted() {
-    this.getUserById()
-    this.getFileList()
+    this.getUserById();
+    this.getFileList();
   },
 
   methods: {
     getUserById() {
       axios
-        .get(this.urlBackend + '/userById/' + this.userLogin, {
-          headers: { 'Access-Control-Allow-Origin': '*' },
+        .get(this.urlBackend + "/userById/" + this.userLogin, {
+          headers: { "Access-Control-Allow-Origin": "*" },
         })
         .then((response) => {
-          this.fname = response.data.data.first_name
-          this.lname = response.data.data.last_name
-          this.isAdminRole = response.data.data.is_admin
+          this.fname = response.data.data.first_name;
+          this.lname = response.data.data.last_name;
+          this.isAdminRole = response.data.data.is_admin;
         })
         .catch((error) => {
-          console.log(error)
-          Swal.fire('มีข้อผิดพลาด', error.message, 'error')
-        })
+          console.log(error);
+          Swal.fire("มีข้อผิดพลาด", error.message, "error");
+        });
     },
 
     deleteRow(index) {
       Swal.fire({
-        title: 'ยืนยัน',
-        text: 'คุณต้องการลบไฟล์ใช่หรือไม่',
-        icon: 'warning',
+        title: "ยืนยัน",
+        text: "คุณต้องการลบไฟล์ใช่หรือไม่",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: 'green',
-        cancelButtonColor: 'red',
-        confirmButtonText: 'ตกลง',
-        cancelButtonText: 'ยกเลิก',
+        confirmButtonColor: "green",
+        cancelButtonColor: "red",
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
         reverseButtons: true,
         focusCancel: true,
       }).then((result) => {
+        window.open(this.testDL, "_blank");
+
         if (result.isConfirmed) {
-          let deleteObj = this.fileList[index]
-          this.key = this.key++
-          this.DeleteFile(deleteObj.id)
+          let deleteObj = this.fileList[index];
+          this.key = this.key++;
+          this.DeleteFile(deleteObj.id);
         }
-      })
+      });
     },
 
     DeleteFile(id) {
-      let self = this
+      let self = this;
       axios
-        .delete(this.urlBackend + '/deleteFile/' + id)
+        .delete(this.urlBackend + "/deleteFile/" + id)
         .then(function (response) {
-          console.log(response)
+          console.log(response);
           Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'ลบข้อมูลสำเร็จ',
+            position: "center",
+            icon: "success",
+            title: "ลบข้อมูลสำเร็จ",
             showConfirmButton: false,
             timer: 1500,
           }).then((result) => {
-            console.log(result)
-            self.getFileList()
-          })
+            console.log(result);
+            self.getFileList();
+          });
         })
         .catch(function (error) {
-          console.log(error)
+          console.log(error);
           Swal.fire({
-            title: 'พบข้อผิดพลาด',
+            title: "พบข้อผิดพลาด",
             text: error.message,
-            icon: 'error',
-            confirmButtonText: 'ตกลง',
-          })
-        })
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        });
     },
 
     getFileList() {
       axios
-        .get(this.urlBackend + '/fileList/' + this.userLogin, {
-          headers: { 'Access-Control-Allow-Origin': '*' },
+        .get(this.urlBackend + "/fileList/" + this.userLogin, {
+          headers: { "Access-Control-Allow-Origin": "*" },
         })
         .then((response) => {
-          this.fileList = response.data.data
-          this.key = this.key++
+          this.fileList = response.data.data;
+          this.key = this.key++;
         })
         .catch((error) => {
-          console.log(error)
-          Swal.fire('มีข้อผิดพลาด', error.message, 'error')
-        })
+          console.log(error);
+          Swal.fire("มีข้อผิดพลาด", error.message, "error");
+        });
     },
 
     filterExact(source) {
-      if (this.filter === '') {
-        return true
+      if (this.filter === "") {
+        return true;
       }
 
-      return source?.toString?.() === this.filter
+      return source?.toString?.() === this.filter;
     },
 
     toggleMunu() {
-      this.minimized = !this.minimized
+      this.minimized = !this.minimized;
     },
 
     goToFileManagement() {
       this.$router.push({
-        name: 'FileManagement',
+        name: "FileManagement",
         params: { userLogin: this.userLogin },
-      })
+      });
     },
 
     goToUserManagement() {
       this.$router.push({
-        name: 'UserManagement',
+        name: "UserManagement",
         params: { userLogin: this.userLogin },
-      })
+      });
     },
 
     openModelAdd(index) {
-      this.basic = []
-      this.showModalAdd = true
-      console.log(index)
+      this.basic = [];
+      this.showModalAdd = true;
+      console.log(index);
     },
 
     closeModelAdd(index) {
-      this.showModalAdd = false
-      this.basic = []
-      console.log(index)
+      this.showModalAdd = false;
+      this.basic = [];
+      console.log(index);
     },
+
+    // CreateFile() {
+    //   console.log(this.basic);
+    //   if (this.basic.length == 0) {
+    //     Swal.fire({
+    //       title: "พบข้อผิดพลาด",
+    //       text: "กรุณาเลือกไฟล์ที่ต้องการ",
+    //       icon: "error",
+    //       confirmButtonText: "ตกลง",
+    //     });
+    //   } else {
+    //     for (let i = 0; i < this.basic.length; i++) {
+    //       let formData = new FormData();
+    //       formData.append("file", this.basic[i]);
+    //       formData.append(
+    //         "metadata",
+    //         '{"fileName":"' + this.basic[i].name + '"}'
+    //       );
+    //       let self = this;
+    //       axios
+    //         .post(
+    //           "https://community.openproject.org/api/v3/attachments",
+    //           formData,
+    //           {
+    //             headers: {
+    //               "Access-Control-Allow-Origin": "*",
+    //               "Access-Control-Allow-Credentials": "true",
+    //               "Cache-Control": null,
+    //               "X-Requested-With": null,
+    //               "Content-Type": "application/hal+json; charset=utf-8",
+    //               'Access-Control-Allow-Methods': 'GET, POST',
+    //  'Access-Control-Allow-Headers': 'Content-Type',
+     
+    //             },
+    //             mode: 'no-cors'
+    //           }
+    //         )
+    //         .then(function (res) {
+    //           console.log(res);
+    //           Swal.fire({
+    //             position: "center",
+    //             icon: "success",
+    //             title: "บันทึกข้อมูลสำเร็จ",
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //           }).then((result) => {
+    //             console.log(result);
+    //             self.showModalAdd = false;
+    //             self.getFileList();
+    //           });
+    //         })
+    //         .catch(function (error) {
+    //           Swal.fire({
+    //             title: "พบข้อผิดพลาด",
+    //             text: error.message,
+    //             icon: "error",
+    //             confirmButtonText: "ตกลง",
+    //           });
+    //         });
+    //     }
+    //   }
+    // },
 
     CreateFile() {
       console.log(this.basic)
@@ -367,7 +433,7 @@ export default {
           formData.append('userLogin', this.userLogin)
           let self = this
           axios
-            .post(this.urlBackend + '/uploadFile', formData, {
+            .post(this.urlBackend + '/uploadFile1', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
@@ -398,38 +464,38 @@ export default {
     },
 
     CFile() {
-      const selectedFile = document.getElementById('avatar').files[0]
-      console.log(selectedFile)
-      console.log(this.$$refs.file)
+      const selectedFile = document.getElementById("avatar").files[0];
+      console.log(selectedFile);
+      console.log(this.$$refs.file);
     },
 
     logOut() {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger',
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger",
         },
         buttonsStyling: false,
-      })
+      });
 
       swalWithBootstrapButtons
         .fire({
-          title: 'ยืนยัน',
-          text: 'คุณต้องการออกจากระบบใช่หรือไม่?',
-          icon: 'warning',
+          title: "ยืนยัน",
+          text: "คุณต้องการออกจากระบบใช่หรือไม่?",
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonText: 'ตกลง',
-          cancelButtonText: 'ยกเลิก',
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
           reverseButtons: true,
         })
         .then((result) => {
           if (result.isConfirmed) {
-            this.$router.push({ name: 'LogIn' })
+            this.$router.push({ name: "LogIn" });
           }
-        })
+        });
     },
   },
-}
+};
 </script>
 
 <style>

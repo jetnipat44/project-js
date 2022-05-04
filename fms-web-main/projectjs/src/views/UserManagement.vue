@@ -106,7 +106,6 @@
             :filter="filter"
             :filter-method="customFilteringFn"
             @filtered="filteredCount = $event.items.length"
-            fi
           >
             <template #cell(edit)="edit">
               <span
