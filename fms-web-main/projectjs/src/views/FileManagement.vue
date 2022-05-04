@@ -471,17 +471,19 @@ export default {
                   },
                 })
                 .then(function () {
-                  Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'บันทึกข้อมูลสำเร็จ',
-                    showConfirmButton: false,
-                    timer: 1500,
-                  }).then((result) => {
-                    console.log(result)
-                    self.showModalAdd = false
-                    self.getFileList()
-                  })
+                  if (i + 1 == this.basic.length) {
+                    Swal.fire({
+                      position: 'center',
+                      icon: 'success',
+                      title: 'บันทึกข้อมูลสำเร็จ',
+                      showConfirmButton: false,
+                      timer: 1500,
+                    }).then((result) => {
+                      console.log(result)
+                      self.showModalAdd = false
+                      self.getFileList()
+                    })
+                  }
                 })
                 .catch(function (error) {
                   Swal.fire({

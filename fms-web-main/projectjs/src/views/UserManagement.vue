@@ -330,20 +330,6 @@
         </va-card>
       </va-modal>
     </div>
-    <v-overlay :value="loadingData" style="z-index: 1000; text-align: center;">
-      <v-progress-circular
-        :active="loadingData"
-        :indeterminate="loadingData"
-        color="primary"
-        size="100"
-      ></v-progress-circular>
-      <br />
-      <br />
-      กำลังโหลดข้อมูล กรุณารอสักครู่...
-    </v-overlay>
-    <div class="flex lg6 xs12 py-4" style="z-index: 10000; text-align: center;">
-      <va-progress-circle :active="loadingData" :indeterminate="loadingData" />
-    </div>
   </body>
 </template>
 
